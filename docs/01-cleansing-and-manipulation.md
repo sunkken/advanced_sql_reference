@@ -122,9 +122,9 @@ FROM emp;
 - Turns row values into columns using an aggregate.
 - Useful for quick cross-tab summaries.
 - Column list in `IN (...)` must be statically specified; cannot use subqueries or variables.
-- **Dynamic workarounds:** Use dynamic SQL (build query string and execute), `CASE` + `GROUP BY`, or PySpark `.groupBy().pivot()` for runtime columns.
-- **Databricks:** Fully supported.
-- **Fabric:** Fully supported; `CASE` + `GROUP BY` is often used for portability.
+- **Dynamic workarounds:** PySpark `.groupBy().pivot()` (Databricks), dynamic SQL with `STRING_AGG` (Fabric), or `CASE` + `GROUP BY` (portable).
+- **Databricks:** Fully supported; `.groupBy().pivot()` determines pivot values automatically.
+- **Fabric:** Fully supported; dynamic SQL requires building column list at runtime.
 
 #### General Usage:
 
@@ -156,15 +156,23 @@ PIVOT (
 
 #### Dynamic PIVOT:
 
+**Databricks (PySpark):**
+
+```python
+# Use DataFrame API - pivot values determined automatically at runtime
+df = spark.table("eba_countries")
+result = df.groupBy("sub_region_id").pivot("region_id").sum("population")
+```
+
 **Fabric (T-SQL):**
 
 ```sql
--- Build column list from data
+-- Build column list dynamically from data
 DECLARE @columns NVARCHAR(MAX);
 SELECT @columns = STRING_AGG(CAST(region_id AS NVARCHAR(10)), ', ')
 FROM (SELECT DISTINCT region_id FROM eba_countries) AS regions;
 
--- Build and execute dynamic query
+-- Execute dynamic PIVOT
 DECLARE @sql NVARCHAR(MAX);
 SET @sql = N'SELECT * FROM (
   SELECT sub_region_id, region_id, population FROM eba_countries
@@ -172,28 +180,14 @@ SET @sql = N'SELECT * FROM (
 EXEC sp_executesql @sql;
 ```
 
-**Databricks (Python):**
-
-```python
-# Get distinct values and build column list
-regions = spark.sql("SELECT DISTINCT region_id FROM eba_countries ORDER BY region_id").collect()
-column_list = ', '.join([str(r.region_id) for r in regions])
-
-# Execute dynamic query
-query = f"""SELECT * FROM (
-  SELECT sub_region_id, region_id, population FROM eba_countries
-) PIVOT (SUM(population) FOR region_id IN ({column_list}))"""
-result = spark.sql(query)
-```
-
 ### UNPIVOT
 
 - Turns columns into rows, the reverse of `PIVOT`.
 - Useful for normalizing wide tables into a long format.
 - Column list in `IN (...)` must be statically specified.
-- **Dynamic workarounds:** Use dynamic SQL or generate column list in application layer.
-- **Databricks:** Fully supported.
-- **Fabric:** Fully supported.
+- **Dynamic workarounds:** `.melt()` DataFrame API (Databricks), dynamic SQL with schema queries (Fabric), or application-layer generation.
+- **Databricks:** Fully supported; `.melt()` handles column lists dynamically.
+- **Fabric:** Fully supported; dynamic SQL queries schema to build column list.
 
 #### General Usage:
 
@@ -217,35 +211,29 @@ UNPIVOT (
 
 #### Dynamic UNPIVOT:
 
+**Databricks (PySpark):**
+
+```python
+# Unpivot all columns except specified ID columns
+df = spark.table("avg_test_scores")
+result = df.melt(ids=['student_id'], variableColumnName='subject', valueColumnName='avg_score')
+```
+
 **Fabric (T-SQL):**
 
 ```sql
--- Build column list from schema (e.g., columns matching a pattern)
+-- Build column list dynamically from schema
 DECLARE @columns NVARCHAR(MAX);
 SELECT @columns = STRING_AGG(QUOTENAME(COLUMN_NAME), ', ')
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'avg_test_scores' 
-  AND COLUMN_NAME IN ('MATHS', 'SCIENCE', 'ENGLISH');
+  AND COLUMN_NAME NOT IN ('student_id');
 
--- Build and execute dynamic query
+-- Execute dynamic UNPIVOT
 DECLARE @sql NVARCHAR(MAX);
 SET @sql = N'SELECT * FROM avg_test_scores
 UNPIVOT (avg_score FOR subject IN (' + @columns + ')) AS upvt';
 EXEC sp_executesql @sql;
-```
-
-**Databricks (Python):**
-
-```python
-# Get column names matching a pattern
-columns = [col for col in spark.table('avg_test_scores').columns 
-           if col in ['MATHS', 'SCIENCE', 'ENGLISH']]
-column_list = ', '.join(columns)
-
-# Execute dynamic query
-query = f"""SELECT * FROM avg_test_scores
-UNPIVOT (avg_score FOR subject IN ({column_list}))"""
-result = spark.sql(query)
 ```
 
 ---

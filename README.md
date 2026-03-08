@@ -26,3 +26,7 @@ See **[style-guide.md](docs/style-guide.md)** for documentation conventions and 
 ## Contributing
 
 Follow the structure and style defined in [style-guide.md](docs/style-guide.md) when adding new content.
+
+## Acknowledgements
+
+Based on material from **The Advanced SQL Course** by Malvik Vaghadia on Udemy.
