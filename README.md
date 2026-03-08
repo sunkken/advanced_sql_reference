@@ -4,17 +4,17 @@ Minimal SQL reference documentation for advanced topics, focused on practical us
 
 ## Contents
 
-- **[01-cleansing-and-manipulation.md](01-cleansing-and-manipulation.md)** - NULL handling, string functions, PIVOT/UNPIVOT
-- **[02-regex.md](02-regex.md)** - Regular expression pattern matching
-- **[03-window-functions.md](03-window-functions.md)** - Window functions and analytics
-- **[04-group-by-extensions.md](04-group-by-extensions.md)** - ROLLUP, CUBE, GROUPING SETS
-- **[05-hierarchical-queries.md](05-hierarchical-queries.md)** - Recursive queries and hierarchies
-- **[06-correlated-subqueries-and-ctes.md](06-correlated-subqueries-and-ctes.md)** - Subqueries and Common Table Expressions
-- **[07-materialized-views.md](07-materialized-views.md)** - Materialized views and performance
+- **[01-cleansing-and-manipulation.md](docs/01-cleansing-and-manipulation.md)** - NULL handling, string functions, PIVOT/UNPIVOT
+- **[02-regex.md](docs/02-regex.md)** - Regular expression pattern matching
+- **[03-window-functions.md](docs/03-window-functions.md)** - Window functions and analytics
+- **[04-group-by-extensions.md](docs/04-group-by-extensions.md)** - ROLLUP, CUBE, GROUPING SETS
+- **[05-hierarchical-queries.md](docs/05-hierarchical-queries.md)** - Recursive queries and hierarchies
+- **[06-correlated-subqueries-and-ctes.md](docs/06-correlated-subqueries-and-ctes.md)** - Subqueries and Common Table Expressions
+- **[07-materialized-views.md](docs/07-materialized-views.md)** - Materialized views and performance
 
 ## Style Guide
 
-See **[style-guide.md](style-guide.md)** for documentation conventions and structure.
+See **[style-guide.md](docs/style-guide.md)** for documentation conventions and structure.
 
 ## Features
 
@@ -25,4 +25,4 @@ See **[style-guide.md](style-guide.md)** for documentation conventions and struc
 
 ## Contributing
 
-Follow the structure and style defined in [style-guide.md](style-guide.md) when adding new content.
+Follow the structure and style defined in [style-guide.md](docs/style-guide.md) when adding new content.
