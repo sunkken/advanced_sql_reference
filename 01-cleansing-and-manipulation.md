@@ -145,7 +145,7 @@ PIVOT (
 ```sql
 SELECT *
 FROM (
-  SELECT region_id, sub_region_id, population
+  SELECT sub_region_id, region_id, population
   FROM eba_countries
 )
 PIVOT (
@@ -167,7 +167,7 @@ FROM (SELECT DISTINCT region_id FROM eba_countries) AS regions;
 -- Build and execute dynamic query
 DECLARE @sql NVARCHAR(MAX);
 SET @sql = N'SELECT * FROM (
-  SELECT region_id, sub_region_id, population FROM eba_countries
+  SELECT sub_region_id, region_id, population FROM eba_countries
 ) PIVOT (SUM(population) FOR region_id IN (' + @columns + ')) AS pvt';
 EXEC sp_executesql @sql;
 ```
@@ -181,7 +181,7 @@ column_list = ', '.join([str(r.region_id) for r in regions])
 
 # Execute dynamic query
 query = f"""SELECT * FROM (
-  SELECT region_id, sub_region_id, population FROM eba_countries
+  SELECT sub_region_id, region_id, population FROM eba_countries
 ) PIVOT (SUM(population) FOR region_id IN ({column_list}))"""
 result = spark.sql(query)
 ```
