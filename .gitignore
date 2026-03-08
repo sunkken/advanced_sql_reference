@@ -1,0 +1,13 @@
+# Ignore PowerPoint slides and source materials
+slides/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
