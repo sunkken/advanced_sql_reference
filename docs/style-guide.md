@@ -62,7 +62,7 @@ Brief description (1 sentence). Includes Databricks and Fabric platform-specific
 ## Completed Files
 
 - **01-cleansing-and-manipulation.md:** COALESCE, NVL, TRIM, LPAD/RPAD, GREATEST/LEAST, PIVOT/UNPIVOT (with dynamic examples)
-- **02-regex.md:** Header and footer added, ready for content
+- **02-regex.md:** Metacharacter Reference table, REGEXP_LIKE, REGEXP_INSTR (more functions pending)
 
 ## Workflow Notes
 

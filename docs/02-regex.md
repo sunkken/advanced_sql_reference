@@ -51,6 +51,27 @@ FROM stores
 WHERE REGEXP_LIKE(physical_address, '\w{2} \d{5}$');
 ```
 
+### REGEXP_INSTR
+
+- Returns the position of the first substring that matches a regular expression pattern.
+- Useful for detecting whether a pattern exists and locating it in `WHERE`, `SELECT`, or `CASE` expressions.
+- **Databricks:** Supported as `regexp_instr(string, pattern)`.
+- **Fabric:** `REGEXP_INSTR` is not native in SQL Warehouse T-SQL; `PATINDEX` can cover simpler wildcard searches but is not a full regex equivalent.
+
+#### General Usage:
+
+```sql
+REGEXP_INSTR(string_expression, pattern)
+```
+
+#### Example:
+
+```sql
+SELECT name, REGEXP_INSTR(name, '\(.+\)') AS parenthesis_pos
+FROM eba_countries
+WHERE REGEXP_INSTR(name, '\(.+\)') > 0;
+```
+
 ---
 
 *Part of Advanced SQL Reference Notes*
