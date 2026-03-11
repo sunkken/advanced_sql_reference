@@ -58,11 +58,12 @@ Brief description (1 sentence). Includes Databricks and Fabric platform-specific
 - Dynamic SQL examples included for PIVOT/UNPIVOT
 - Examples use realistic table/column names from context
 - Each function/feature has standardized Databricks and Fabric bullets
+- Shared syntax/reference sections may use compact tables without usage/example blocks
 
 ## Completed Files
 
 - **01-cleansing-and-manipulation.md:** COALESCE, NVL, TRIM, LPAD/RPAD, GREATEST/LEAST, PIVOT/UNPIVOT (with dynamic examples)
-- **02-regex.md:** Metacharacter Reference table, REGEXP_LIKE, REGEXP_INSTR (more functions pending)
+- **02-regex.md:** Metacharacter Reference, Character Classes, REGEXP_LIKE, REGEXP_INSTR, REGEXP_SUBSTR, REGEXP_REPLACE
 
 ## Workflow Notes
 

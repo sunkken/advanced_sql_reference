@@ -21,12 +21,26 @@ Regular expression pattern matching functions for advanced string filtering and 
 | `{m,n}` | Between Count Interval | Matches at least `m` but not more than `n` occurrences. |
 | `[ ... ]` | Matching Character List | Matches any character from the listed set or range. |
 | `[^ ... ]` | Non-Matching Character List | Matches any character not in the listed set or range. |
-| `\|` | Alternation (Or) | Matches one expression or another, for example `aa\|ab`. |
+| &#124; | Alternation (Or) | Matches one expression or another, for example `aa` or `ab`. |
 | `( ... )` | Grouping/Subexpression | Treats grouped expression as a single unit. |
 | `\1` to `\9` | Backreference | Matches previously captured groups 1 through 9. |
 | `\` | Escape Character | Escapes the following metacharacter so it is treated literally. |
 | `^` | Beginning Anchor | Matches when expression occurs at the start of the string. |
 | `$` | End Anchor | Matches when expression occurs at the end of the string. |
+
+### Character Classes
+
+- Common POSIX-style character classes used inside bracket expressions.
+
+| Class | Meaning | Example |
+|---|---|---|
+| `[[:alnum:]]` | Alphanumeric characters | `[[:alnum:]]+` |
+| `[[:alpha:]]` | Alphabetic characters | `[[:alpha:]]{3}` |
+| `[[:digit:]]` | Numeric digits | `[[:digit:]]{5}` |
+| `[[:lower:]]` | Lowercase alphabetic characters | `[[:lower:]]+` |
+| `[[:upper:]]` | Uppercase alphabetic characters | `[[:upper:]]+` |
+| `[[:space:]]` | Whitespace characters | `[[:space:]]+` |
+| `[[:punct:]]` | Punctuation characters | `[[:punct:]]` |
 
 ## Pattern Matching Functions
 
@@ -70,6 +84,53 @@ REGEXP_INSTR(string_expression, pattern)
 SELECT name, REGEXP_INSTR(name, '\(.+\)') AS parenthesis_pos
 FROM eba_countries
 WHERE REGEXP_INSTR(name, '\(.+\)') > 0;
+```
+
+### REGEXP_SUBSTR
+
+- Returns the substring that matches a regular expression pattern.
+- Useful for extracting tokens (for example first word, code parts, or bracketed values) in `SELECT` projections and transformation logic.
+- **Databricks:** Supported as `regexp_substr(string, pattern)`.
+- **Fabric:** `REGEXP_SUBSTR` is not native in SQL Warehouse T-SQL; use `PATINDEX` + `SUBSTRING` for simpler wildcard cases or Spark runtime alternatives for full regex extraction.
+
+#### General Usage:
+
+```sql
+REGEXP_SUBSTR(string_expression, pattern)
+```
+
+#### Example:
+
+```sql
+SELECT name, REGEXP_SUBSTR(name, '^\w+')
+FROM eba_countries;
+```
+
+### REGEXP_REPLACE
+
+- Returns a string where substrings matching a regular expression are replaced with another value.
+- Useful for standardizing text, removing unwanted characters, and reformatting values with capture groups.
+- **Databricks:** Supported as `regexp_replace(string, pattern, replacement)`.
+- **Fabric:** `REGEXP_REPLACE` is not native in SQL Warehouse T-SQL; use `REPLACE` for literal substitutions or Spark runtime alternatives for full regex replacement.
+
+#### General Usage:
+
+```sql
+REGEXP_REPLACE(string_expression, pattern, replacement)
+```
+
+#### Examples:
+
+```sql
+SELECT
+    email_address,
+    REGEXP_REPLACE(email_address, '\.', '-') AS updated_email
+FROM customers;
+
+SELECT
+    email_address,
+    REGEXP_REPLACE(email_address, '(\w+)\.(\w+)(@.+)', '\2.\1\3') AS swapped_email
+FROM customers;
 ```
 
 ---
