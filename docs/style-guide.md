@@ -64,6 +64,7 @@ Brief description (1 sentence). Includes Databricks and Fabric platform-specific
 
 - **01-cleansing-and-manipulation.md:** COALESCE, NVL, TRIM, LPAD/RPAD, GREATEST/LEAST, PIVOT/UNPIVOT (with dynamic examples)
 - **02-regex.md:** Metacharacter Reference, Character Classes, REGEXP_LIKE, REGEXP_INSTR, REGEXP_SUBSTR, REGEXP_REPLACE
+- **03-window-functions.md:** Intro section added with subquery vs window-function comparison (function sections pending)
 
 ## Workflow Notes
 
